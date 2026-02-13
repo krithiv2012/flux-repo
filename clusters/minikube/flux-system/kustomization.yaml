@@ -1,5 +1,25 @@
-apiVersion: kustomize.config.k8s.io/v1beta1
+apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
 kind: Kustomization
-resources:
-- gotk-components.yaml
-- gotk-sync.yaml
+metadata:
+  name: minikube
+  namespace: flux-system
+spec:
+  # How often Flux reconciles your manifests
+  interval: 1m
+
+  # Path inside your Git repo where the manifests are
+  path: "./clusters/minikube"
+
+  # Automatically delete resources removed from Git
+  prune: true
+
+  # Reference to the GitRepository source
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+
+  # Optional: apply manifests in order, can be omitted if using resources in kustomization.yaml
+  # resources:
+  #   - namespace.yaml
+  #   - nginx-deployment.yaml
+  #   - nginx-service.yaml
